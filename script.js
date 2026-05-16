@@ -1,4 +1,4 @@
-star/* ═══════════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    CarbonWalk · NU HealthyZerocarbon
    script.js — Tab routing, step tracking, carbon math,
                tree calc, history, badges, map timer
@@ -17,6 +17,8 @@ const CO2_PER_TREE_G     = 21800;         // 21.8 kg CO₂ absorbed per year (tr
 const RING_CIRCUMFERENCE = 502;           // 2π × 80
  
 const DAILY_GOAL_DEFAULT = 10000;
+const DEMO_LOGIN_EMAIL = 'alex@nu.ac.th';
+const DEMO_LOGIN_PASSWORD = '111';
  
 /* ──────────────────────────────────────────────
    STATE
@@ -91,13 +93,18 @@ function initLogin() {
     const email = $('login-email').value.trim();
     const pass  = $('login-password').value.trim();
  
+    const btn = $('btn-login');
     if (!email || !pass) {
       showToast('⚠️ Please enter your email and password');
       return;
     }
  
+    if (email !== DEMO_LOGIN_EMAIL || pass !== DEMO_LOGIN_PASSWORD) {
+      showToast('⚠️ Incorrect login. Use alex@nu.ac.th / 111');
+      return;
+    }
+ 
     // Animate button
-    const btn = $('btn-login');
     btn.textContent = '🌿 Logging in…';
     btn.disabled = true;
  
@@ -122,6 +129,8 @@ function initLogin() {
       showToast(`🌱 Welcome back, ${state.userName}! Let's walk!`);
       initApp();
       switchTab('home');
+      btn.disabled = false;
+      btn.textContent = 'Let\'s Walk! 🚀';
     }, 900);
   });
  
@@ -149,7 +158,14 @@ function initTabs() {
 }
  
 function switchTab(tabId, source) {
+  // If target is already active, scroll content to top instead of re-rendering
   const target = $('tab-' + tabId);
+  const current = document.querySelector('.tab-content.active');
+  if (current && target && current.id === target.id) {
+    const content = document.querySelector('.content-area');
+    if (content) content.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
 
   // Hide all tabs and show target
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -164,6 +180,10 @@ function switchTab(tabId, source) {
   document.querySelectorAll('.top-nav-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.tab === tabId);
   });
+
+  // Ensure content area is at top when switching
+  const content = document.querySelector('.content-area');
+  if (content) content.scrollTo({ top: 0, behavior: 'smooth' });
 }
  
 /* ──────────────────────────────────────────────
@@ -621,8 +641,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Demo: auto-fill login for quick testing
   setTimeout(() => {
     if ($('login-email') && !$('login-email').value) {
-      $('login-email').value = 'alex@nu.ac.th';
-      $('login-password').value = 'password123';
+      $('login-email').value = DEMO_LOGIN_EMAIL;
+      $('login-password').value = DEMO_LOGIN_PASSWORD;
     }
   }, 600);
 });

@@ -294,8 +294,16 @@ button {
 }
 .login-footer a { color: var(--green-600); font-weight: 700; }
  
+.login-hint {
+  margin-top: 16px;
+  font-size: 0.82rem;
+  color: var(--green-700);
+  text-align: center;
+  font-weight: 700;
+}
+
 .eco-note {
-  margin-top: 24px;
+  margin-top: 12px;
   background: var(--green-50);
   border: 1px solid var(--green-200);
   border-radius: var(--radius-md);
