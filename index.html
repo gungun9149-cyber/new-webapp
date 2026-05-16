@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CarbonWalk 🌿 NU HealthyZerocarbon</title>
+  <link rel="stylesheet" href="code.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+</head>
+<body>
+ 
+  <!-- ═══════════════════════════════════════════
+       LOGIN PAGE
+  ═══════════════════════════════════════════ -->
+  <div id="page-login" class="page active">
+    <div class="login-bg">
+      <span class="floating-sticker s1">🌱</span>
+      <span class="floating-sticker s2">🍃</span>
+      <span class="floating-sticker s3">🌍</span>
+      <span class="floating-sticker s4">✨</span>
+      <span class="floating-sticker s5">🌿</span>
+      <span class="floating-sticker s6">💚</span>
+    </div>
+ 
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-badge">🚶</div>
+        <h1 class="logo-title">CarbonWalk</h1>
+        <p class="logo-sub">NU HealthyZerocarbon 🌿</p>
+      </div>
+ 
+      <div class="login-tagline">
+        <p>ยินดีต้อนรับ! กรุณาเข้าสู่ระบบ<br/><strong>saves our planet 🌎</strong></p>
+      </div>
+ 
+      <div class="form-group">
+        <label>📧 Email / Student ID</label>
+        <input type="text" id="login-email" placeholder="student@university.ac.th" />
+      </div>
+      <div class="form-group">
+        <label>🔒 Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" />
+      </div>
+ 
+      <button class="btn-primary" id="btn-login">
+        Let's Walk! 🚀
+      </button>
+ 
+      <div class="login-footer">
+        <a href="#">Forgot password?</a> · <a href="#">Sign Up</a>
+      </div>
+ 
+      <div class="eco-note">
+        🌱 Walking 1km saves ~150g of CO₂ · Join 12,400+ eco walkers
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ═══════════════════════════════════════════
+       MAIN APP SHELL (after login)
+  ═══════════════════════════════════════════ -->
+  <div id="app-shell" class="hidden">
+ 
+    <!-- TOP BAR (desktop) -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <span class="tb-logo">🚶 CarbonWalk</span>
+        <span class="tb-tagline">NU HealthyZerocarbon</span>
+      </div>
+      <nav class="top-nav">
+        <button class="top-nav-btn active" data-tab="home">🏠 Home</button>
+        <button class="top-nav-btn" data-tab="map">🗺️ Map</button>
+        <button class="top-nav-btn" data-tab="achievements">🏆 Badges</button>
+        <button class="top-nav-btn" data-tab="history">📅 History</button>
+        <button class="top-nav-btn" data-tab="profile">👤 Profile</button>
+      </nav>
+      <div class="top-bar-right">
+        <div class="top-streak">🔥 <span id="tb-streak">7</span> day streak</div>
+        <div class="top-avatar" id="top-avatar-btn">
+          <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=eco" alt="avatar" />
+        </div>
+      </div>
+    </header>
+ 
+    <!-- CONTENT AREA -->
+    <main class="content-area">
+ 
+      <!-- ─── HOME / DASHBOARD ─── -->
+      <section id="tab-home" class="tab-content active">
+ 
+        <div class="dashboard-greeting">
+          <div>
+            <p class="greeting-sub">Good morning! 🌤️</p>
+            <h2 class="greeting-name">Eco Walker <span id="user-name-home">Alex</span> 👋</h2>
+          </div>
+          <div class="daily-goal-pill">
+            <span>Goal: <strong id="goal-display">10,000</strong> steps</span>
+          </div>
+        </div>
+ 
+        <!-- STEP RING TRACKER -->
+        <div class="step-tracker-card">
+          <div class="step-ring-wrap">
+            <svg class="step-ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <circle class="ring-bg" cx="100" cy="100" r="80" />
+              <circle class="ring-progress" id="ring-progress" cx="100" cy="100" r="80"
+                stroke-dasharray="502"
+                stroke-dashoffset="502" />
+            </svg>
+            <div class="ring-inner">
+              <div class="ring-emoji">🚶</div>
+              <div class="ring-steps" id="ring-steps">0</div>
+              <div class="ring-label">steps today</div>
+            </div>
+          </div>
+ 
+          <div class="step-stats-row">
+            <div class="stat-chip">
+              <span class="stat-icon">🔥</span>
+              <span class="stat-val" id="stat-cal">0</span>
+              <span class="stat-label">kcal</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-icon">📏</span>
+              <span class="stat-val" id="stat-km">0.0</span>
+              <span class="stat-label">km</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-icon">⏱️</span>
+              <span class="stat-val" id="stat-min">0</span>
+              <span class="stat-label">min</span>
+            </div>
+          </div>
+ 
+          <div class="track-controls">
+            <button class="btn-track" id="btn-start-stop">▶ Start Walk</button>
+            <button class="btn-reset" id="btn-reset">↺ Reset</button>
+          </div>
+        </div>
+ 
+        <!-- CARBON SAVED WIDGET -->
+        <div class="carbon-card">
+          <div class="carbon-header">
+            <h3>🌍 Carbon Saved Today</h3>
+            <span class="carbon-badge">Live</span>
+          </div>
+          <div class="carbon-body">
+            <div class="carbon-main">
+              <span class="carbon-val" id="carbon-grams">0</span>
+              <span class="carbon-unit">g CO₂</span>
+            </div>
+            <div class="carbon-sub">
+              ≈ <span id="carbon-km-equiv">0.0</span> km of car travel avoided 🚗💨
+            </div>
+          </div>
+          <div class="carbon-bar-wrap">
+            <div class="carbon-bar" id="carbon-bar"></div>
+          </div>
+        </div>
+ 
+        <!-- TREE WIDGET -->
+        <div class="tree-widget-card">
+          <div class="tree-widget-left">
+            <div class="tree-emoji-big" id="tree-emoji">🌱</div>
+            <div class="tree-progress-ring-wrap">
+              <svg viewBox="0 0 80 80" class="tree-ring-svg">
+                <circle class="tree-ring-bg" cx="40" cy="40" r="32"/>
+                <circle class="tree-ring-fill" id="tree-ring-fill" cx="40" cy="40" r="32"
+                  stroke-dasharray="201"
+                  stroke-dashoffset="201"/>
+              </svg>
+              <span class="tree-ring-pct" id="tree-ring-pct">0%</span>
+            </div>
+          </div>
+          <div class="tree-widget-right">
+            <h3 class="tree-title">🌳 Trees Saved</h3>
+            <p class="tree-count"><span id="tree-count">0</span> <small>virtual trees</small></p>
+            <p class="tree-sub">
+              <span id="tree-co2-left">21.8</span>g CO₂ more to<br/>grow your next 🌳
+            </p>
+            <div class="tree-legend">
+              <span>🌱 Seedling</span>
+              <span>🌿 Sapling</span>
+              <span>🌳 Full Tree</span>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- QUICK ACHIEVEMENTS STRIP -->
+        <div class="quick-achieve">
+          <h3>🏅 Today's Challenges</h3>
+          <div class="challenge-strip" id="challenge-strip">
+            <!-- filled by JS -->
+          </div>
+        </div>
+ 
+      </section>
+ 
+      <!-- ─── MAP ─── -->
+      <section id="tab-map" class="tab-content">
+        <div class="map-header">
+          <h2>🗺️ Live Walk Tracker</h2>
+          <p>Track your route in real-time</p>
+        </div>
+ 
+        <div class="map-placeholder" id="map-placeholder">
+          <div class="map-overlay-ui">
+            <div class="map-mock-route"></div>
+            <div class="map-pin current">📍</div>
+            <div class="map-pin start">🏁</div>
+            <div class="map-grid"></div>
+          </div>
+          <div class="map-overlay-label">
+            <span class="map-label-text">🛰️ GPS Map (connect device to activate)</span>
+          </div>
+        </div>
+ 
+        <div class="map-stats-row">
+          <div class="map-stat">
+            <div class="ms-icon">📏</div>
+            <div class="ms-val" id="map-km">0.0 km</div>
+            <div class="ms-label">Distance</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">⏱️</div>
+            <div class="ms-val" id="map-time">00:00</div>
+            <div class="ms-label">Time</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">⚡</div>
+            <div class="ms-val" id="map-pace">0:00</div>
+            <div class="ms-label">Pace / km</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">🌍</div>
+            <div class="ms-val" id="map-co2">0g</div>
+            <div class="ms-label">CO₂ Saved</div>
+          </div>
+        </div>
+ 
+        <div class="map-controls">
+          <button class="btn-primary" id="btn-map-start">▶ Start Tracking</button>
+          <button class="btn-secondary" id="btn-map-pause">⏸ Pause</button>
+          <button class="btn-danger" id="btn-map-stop">⏹ Stop &amp; Save</button>
+        </div>
+ 
+        <div class="route-history">
+          <h3>📍 Recent Routes</h3>
+          <div class="route-list" id="route-list">
+            <div class="route-item">
+              <span class="route-icon">🏫</span>
+              <div class="route-info">
+                <strong>Campus Loop</strong>
+                <small>2.3 km · 28 min · 345g CO₂ saved</small>
+              </div>
+              <span class="route-date">Today</span>
+            </div>
+            <div class="route-item">
+              <span class="route-icon">🏪</span>
+              <div class="route-info">
+                <strong>Market Walk</strong>
+                <small>1.8 km · 22 min · 270g CO₂ saved</small>
+              </div>
+              <span class="route-date">Yesterday</span>
+            </div>
+            <div class="route-item">
+              <span class="route-icon">🌳</span>
+              <div class="route-info">
+                <strong>Park Path</strong>
+                <small>3.1 km · 38 min · 465g CO₂ saved</small>
+              </div>
+              <span class="route-date">Mon</span>
+            </div>
+          </div>
+        </div>
+      </section>
+ 
+      <!-- ─── ACHIEVEMENTS ─── -->
+      <section id="tab-achievements" class="tab-content">
+        <div class="achieve-header">
+          <h2>🏆 Badges &amp; Achievements</h2>
+          <p>Keep walking to unlock them all!</p>
+        </div>
+ 
+        <div class="achieve-summary">
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-unlocked">3</span>
+            <span class="ach-sum-label">Unlocked</span>
+          </div>
+          <div class="ach-sum-divider"></div>
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-total">12</span>
+            <span class="ach-sum-label">Total</span>
+          </div>
+          <div class="ach-sum-divider"></div>
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-points">450</span>
+            <span class="ach-sum-label">Eco Points</span>
+          </div>
+        </div>
+ 
+        <!-- Level Bar -->
+        <div class="level-card">
+          <div class="level-header">
+            <span class="level-icon">🌿</span>
+            <div>
+              <strong class="level-name" id="level-name">Eco Seedling</strong>
+              <p class="level-desc">Keep walking to level up!</p>
+            </div>
+            <span class="level-num">Lv. <span id="level-num">2</span></span>
+          </div>
+          <div class="level-bar-bg">
+            <div class="level-bar-fill" id="level-bar-fill" style="width:35%"></div>
+          </div>
+          <div class="level-bar-labels">
+            <span>450 pts</span><span>Next: 1,000 pts</span>
+          </div>
+        </div>
+ 
+        <!-- Badges Grid -->
+        <div class="badges-section">
+          <h3>🎖️ My Badges</h3>
+          <div class="badges-grid" id="badges-grid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+ 
+        <!-- Active Challenges -->
+        <div class="challenges-section">
+          <h3>⚡ Active Challenges</h3>
+          <div class="challenges-list" id="challenges-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+ 
+      <!-- ─── HISTORY ─── -->
+      <section id="tab-history" class="tab-content">
+        <div class="history-header">
+          <h2>📅 Walking History</h2>
+          <p>Your eco journey so far 🌱</p>
+        </div>
+ 
+        <!-- Week Summary -->
+        <div class="week-summary">
+          <h3>This Week</h3>
+          <div class="week-bars" id="week-bars">
+            <!-- Filled by JS -->
+          </div>
+          <div class="week-days" id="week-days">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+ 
+        <!-- Cumulative Stats -->
+        <div class="cumul-stats">
+          <div class="cumul-card">
+            <span class="cumul-icon">👣</span>
+            <span class="cumul-val" id="total-steps-all">0</span>
+            <span class="cumul-label">Total Steps</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">📏</span>
+            <span class="cumul-val" id="total-km-all">0.0 km</span>
+            <span class="cumul-label">Distance</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">🌍</span>
+            <span class="cumul-val" id="total-co2-all">0g</span>
+            <span class="cumul-label">CO₂ Saved</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">🌳</span>
+            <span class="cumul-val" id="total-trees-all">0</span>
+            <span class="cumul-label">Trees Saved</span>
+          </div>
+        </div>
+ 
+        <!-- Daily Log -->
+        <div class="daily-log">
+          <h3>📋 Daily Log</h3>
+          <div class="log-list" id="log-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+ 
+      <!-- ─── PROFILE ─── -->
+      <section id="tab-profile" class="tab-content">
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=eco" class="profile-avatar" alt="avatar" />
+            <div class="profile-level-badge">Lv.2</div>
+          </div>
+          <h2 class="profile-name" id="profile-name-display">Alex Walker</h2>
+          <p class="profile-id">🎓 Student · Naresuan University</p>
+          <p class="profile-joined">🌱 Eco walker since May 2024</p>
+ 
+          <div class="profile-rank">
+            <span>🌿 Eco Seedling</span>
+          </div>
+        </div>
+ 
+        <!-- All-time stats -->
+        <div class="profile-stats-grid">
+          <div class="ps-card">
+            <span class="ps-icon">👣</span>
+            <span class="ps-val" id="ps-total-steps">128,450</span>
+            <span class="ps-label">Lifetime Steps</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🌍</span>
+            <span class="ps-val" id="ps-total-co2">19.3 kg</span>
+            <span class="ps-label">CO₂ Saved</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🌳</span>
+            <span class="ps-val" id="ps-total-trees">88</span>
+            <span class="ps-label">Trees Saved</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🔥</span>
+            <span class="ps-val" id="ps-streak">7</span>
+            <span class="ps-label">Day Streak</span>
+          </div>
+        </div>
+ 
+        <!-- Preferences -->
+        <div class="profile-section">
+          <h3>⚙️ Preferences</h3>
+          <div class="pref-list">
+            <div class="pref-item">
+              <span>🏃 Daily Step Goal</span>
+              <div class="pref-control">
+                <button class="pref-btn" id="goal-minus">−</button>
+                <span id="pref-goal-val">10,000</span>
+                <button class="pref-btn" id="goal-plus">+</button>
+              </div>
+            </div>
+            <div class="pref-item">
+              <span>🔔 Notifications</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-notif" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-item">
+              <span>🌙 Dark Mode</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-dark" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-item">
+              <span>📍 Auto GPS Track</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-gps" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+ 
+        <!-- Eco Impact -->
+        <div class="profile-section eco-impact">
+          <h3>🌎 Your Eco Impact</h3>
+          <div class="impact-statement">
+            <p>Your walking has saved the equivalent of</p>
+            <div class="impact-big">🚗 128 km</div>
+            <p>of car travel, keeping <strong>19.3 kg</strong> of CO₂ out of our atmosphere. You are a <strong>Climate Hero!</strong> 🦸‍♀️</p>
+          </div>
+        </div>
+ 
+        <button class="btn-logout" id="btn-logout">🚪 Log Out</button>
+      </section>
+ 
+    </main><!-- end .content-area -->
+ 
+    <!-- BOTTOM NAV (mobile) -->
+    <nav class="bottom-nav">
+      <button class="bnav-btn active" data-tab="home">
+        <span class="bnav-icon">🏠</span>
+        <span class="bnav-label">Home</span>
+      </button>
+      <button class="bnav-btn" data-tab="map">
+        <span class="bnav-icon">🗺️</span>
+        <span class="bnav-label">Map</span>
+      </button>
+      <button class="bnav-btn" data-tab="achievements">
+        <span class="bnav-icon">🏆</span>
+        <span class="bnav-label">Badges</span>
+      </button>
+      <button class="bnav-btn" data-tab="history">
+        <span class="bnav-icon">📅</span>
+        <span class="bnav-label">History</span>
+      </button>
+      <button class="bnav-btn" data-tab="profile">
+        <span class="bnav-icon">👤</span>
+        <span class="bnav-label">Profile</span>
+      </button>
+    </nav>
+ 
+  </div><!-- end #app-shell -->
+ 
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+ 
+  <script src="script.js"></script>
+</body>
+</html>
