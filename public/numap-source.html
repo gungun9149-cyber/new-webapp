@@ -1,0 +1,1875 @@
+﻿
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>
+	แผนที่มหาวิทยาลัยนเรศวร
+</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" /><meta charset="utf-8" /></head>
+    <style>
+   
+      #map {
+        height: 100%;
+        width: 100%;       
+      }
+     
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+       #description {
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+      }
+
+      #infowindow-content .title {
+        font-weight: bold;
+      }
+
+      #infowindow-content {
+        display: none;
+      }
+
+      #map #infowindow-content {
+        display: inline;
+      }
+      .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+      
+      #side_bar {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 0px;
+        padding: 0 0px 0 0px;
+        text-overflow: ellipsis;
+        width: 240px;
+      }
+
+      #side_bar:focus {
+        border-color: #4d90fe;
+      }
+
+      #title {
+        color: #fff;
+        background-color: #4d90fe;
+        font-size: 25px;
+        font-weight: 500;
+        padding: 6px 12px;
+      }
+      #target {
+        width: 345px;
+      }
+      .styled-select select {
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        height: 29px;
+        padding: 5px; /* If you add too much padding here, the options won't show in IE */
+        width: 268px;
+      }
+    </style>
+<body>
+    <div id="map"></div>
+    <div id="side_bar" class="controls" width='100%' style="z-index: 0; padding: 0px; margin: 0px; position: absolute; left: 50px; top: 0px;"></div>
+</body>
+
+      <script>
+        
+          var datamain;
+          var maps;
+          var side_bar_html="";
+          var marker=[];
+
+          var melocaltion="";
+          function initMap() {
+
+              var mapOptions = {
+                  center: { lat: 16.747624599999998, lng: 100.19527389999999 },
+                  zoom: 16,
+
+              }             
+
+              maps = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+              var input = document.getElementById('side_bar');
+              // var searchBox = new google.maps.places.SearchBox(input);
+              maps.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+              infoWindow = new google.maps.InfoWindow;
+              
+              // addmarkers ใช้สร้าง side_bar_html ด้วย, ต้องรันก่อน
+              addmarkers(maps);
+
+              document.getElementById("side_bar").innerHTML = "<select onchange='myclick(this.value);' style='width: 100%; height: 35px;'><option checked>กรุณาเลือกสถานที่</option>" + side_bar_html + "</select>";
+             
+          }    
+
+          function addmarkers(maps) {
+            
+
+              var markerid     = 107;
+              var markertitle  = "**จุดรับพระราชทานปริญญาบัตร(อาคาร KNECC)";
+              var markerdetail = "<img src='img/GreatHall.jpg' width='150'>"; //"&lt;img src=&#39;img/GreatHall.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "GreatHall_logo.jpg";
+              var markerlat    = 16.748058;
+              var markerlng    = 100.186203;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 23;
+              var markertitle  = "**โรงพยาบาลมหาวิทยาลัยนเรศวร";
+              var markerdetail = "<img src='img/medh_logo.png' width='150'>"; //"&lt;img src=&#39;img/medh_logo.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "medh_logo.png";
+              var markerlat    = 16.7489345;
+              var markerlng    = 100.1895072;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 13;
+              var markertitle  = "กองการศึกษาทั่วไป (อาคารมิ่งขวัญ)";
+              var markerdetail = "ชั้น 2</br><img src='img/IMG_1452-11.jpg' width='150'>"; //"ชั้น 2&lt;/br&gt;&lt;img src=&#39;img/IMG_1452-11.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "gened.png";
+              var markerlat    = 16.74865122;
+              var markerlng    = 100.1930625;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 9;
+              var markertitle  = "กองกิจการนิสิต (อาคารขวัญเมือง) ";
+              var markerdetail = "<img src='img/DSCF0250.jpg' width='150'>"; //"&lt;img src=&#39;img/DSCF0250.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "NU_Dormitory.JPG";
+              var markerlat    = 16.73722898;
+              var markerlng    = 100.199538;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 10;
+              var markertitle  = "กองคลัง (อาคารมิ่งขวัญ) ";
+              var markerdetail = "<img src='img/IMG_1452-11.jpg' width='150'>"; //"&lt;img src=&#39;img/IMG_1452-11.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "finance.png";
+              var markerlat    = 16.74856025;
+              var markerlng    = 100.1995516;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 11;
+              var markertitle  = "กองบริการการศึกษา (อาคารเรียนรวม QS)";
+              var markerdetail = "<img src='img/300px-QS_hall.JPG' width='150'>"; //"&lt;img src=&#39;img/300px-QS_hall.JPG&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "logo_acad.png";
+              var markerlat    = 16.74675773;
+              var markerlng    = 100.192665;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 1;
+              var markertitle  = "กองบริการเทคโนโลยีสารสนเทศและการสื่อสาร (CITCOMS)";
+              var markerdetail = "ชั้น 1 ห้องบริการอินเตอร์เน็ต</br>ชั้น 2 บริการเครือข่าย  e-mail และซ่อมคอมพิวเตอร์</br>ชั้น 3 ศูนย์สอบ ICT-Exam </br> ชั้น 4 NULC (ศูนย์ภาษา) </br> ชั้น 5 - 6 ห้องประชุมกลุ่มย่อยสำหรับนิสิต </br> ชั้น 7 ภาควิชาดนตรี</br><img src='img/citcoms-pic-ab1.png' width='150'> "; //"ชั้น 1 ห้องบริการอินเตอร์เน็ต&lt;/br&gt;ชั้น 2 บริการเครือข่าย  e-mail และซ่อมคอมพิวเตอร์&lt;/br&gt;ชั้น 3 ศูนย์สอบ ICT-Exam &lt;/br&gt; ชั้น 4 NULC (ศูนย์ภาษา) &lt;/br&gt; ชั้น 5 - 6 ห้องประชุมกลุ่มย่อยสำหรับนิสิต &lt;/br&gt; ชั้น 7 ภาควิชาดนตรี&lt;/br&gt;&lt;img src=&#39;img/citcoms-pic-ab1.png&#39; width=&#39;150&#39;&gt; "; invalid
+              var markerimg    = "computer.png";
+              var markerlat    = 16.74749687;
+              var markerlng    = 100.1953487;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 14;
+              var markertitle  = "กองอาคารสถานที่ ";
+              var markerdetail = "<img src='img/office.png' width='150'>"; //"&lt;img src=&#39;img/office.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "office.png";
+              var markerlat    = 16.7443842;
+              var markerlng    = 100.1985449;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 32;
+              var markertitle  = "คณะเกษตรศาสตร์ ทรัพยากรธรรมชาติและสิ่งแวดล้อม";
+              var markerdetail = "<img src='img/anre.png' width='150'>"; //"&lt;img src=&#39;img/anre.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "anre.png";
+              var markerlat    = 16.74619511;
+              var markerlng    = 100.1957609;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 25;
+              var markertitle  = "คณะทันตแพทยศาสตร์";
+              var markerdetail = "<img src='img/dent.jpg' width='150'>"; //"&lt;img src=&#39;img/dent.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "dent.jpg";
+              var markerlat    = 16.74646623;
+              var markerlng    = 100.1891853;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 39;
+              var markertitle  = "คณะนิติศาสตร์";
+              var markerdetail = "<img src='img/law.png' width='150'>"; //"&lt;img src=&#39;img/law.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "law.png";
+              var markerlat    = 16.74877705;
+              var markerlng    = 100.1959695;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 44;
+              var markertitle  = "คณะบริหารธุรกิจ เศรษฐศาสตร์และการสื่อสาร";
+              var markerdetail = "<img src='img/bec.png' width='150'>"; //"&lt;img src=&#39;img/bec.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "bec.png";
+              var markerlat    = 16.74876895;
+              var markerlng    = 100.1965233;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 30;
+              var markertitle  = "คณะพยาบาลศาสตร์";
+              var markerdetail = "<img src='img/nurse.png' width='150'>"; //"&lt;img src=&#39;img/nurse.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "nurse.png";
+              var markerlat    = 16.74541832;
+              var markerlng    = 100.1893244;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 24;
+              var markertitle  = "คณะแพทยศาสตร์";
+              var markerdetail = "<img src='img/med.png' width='150'>"; //"&lt;img src=&#39;img/med.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "med.png";
+              var markerlat    = 16.74812288;
+              var markerlng    = 100.1888527;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 27;
+              var markertitle  = "คณะเภสัชศาสตร์";
+              var markerdetail = "<img src='img/pha.png' width='150'>"; //"&lt;img src=&#39;img/pha.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "pha.png";
+              var markerlat    = 16.74642955;
+              var markerlng    = 100.1902523;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 42;
+              var markertitle  = "คณะมนุษยศาสตร์";
+              var markerdetail = "<img src='img/human.png' width='150'>"; //"&lt;img src=&#39;img/human.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "human.png";
+              var markerlat    = 16.7491191;
+              var markerlng    = 100.1942957;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 35;
+              var markertitle  = "คณะวิทยาศาสตร์";
+              var markerdetail = "<img src='img/science.png' width='150'>"; //"&lt;img src=&#39;img/science.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "science.png";
+              var markerlat    = 16.74186833;
+              var markerlng    = 100.1941494;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 28;
+              var markertitle  = "คณะวิทยาศาสตร์การแพทย์";
+              var markerdetail = "<img src='img/Medsci.png' width='150'>"; //"&lt;img src=&#39;img/Medsci.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "Medsci.png";
+              var markerlat    = 16.74540437;
+              var markerlng    = 100.1913545;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 37;
+              var markertitle  = "คณะวิศวกรรมศาสตร์";
+              var markerdetail = "<img src='img/eng.png' width='150'>"; //"&lt;img src=&#39;img/eng.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "eng.png";
+              var markerlat    = 16.7438485;
+              var markerlng    = 100.1965447;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 40;
+              var markertitle  = "คณะศึกษาศาสตร์";
+              var markerdetail = "<img src='img/edu.png' width='150'>"; //"&lt;img src=&#39;img/edu.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "edu.png";
+              var markerlat    = 16.74734428;
+              var markerlng    = 100.1942014;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 33;
+              var markertitle  = "คณะสถาปัตยกรรมศาสตร์";
+              var markerdetail = "<img src='img/at.jpg' width='150'>"; //"&lt;img src=&#39;img/at.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "at.jpg";
+              var markerlat    = 16.74598996;
+              var markerlng    = 100.194697;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 31;
+              var markertitle  = "คณะสหเวชศาสตร์";
+              var markerdetail = "<img src='img/ahs.png' width='150'>"; //"&lt;img src=&#39;img/ahs.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "ahs.png";
+              var markerlat    = 16.74591514;
+              var markerlng    = 100.189145;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 43;
+              var markertitle  = "คณะสังคมศาสตร์";
+              var markerdetail = "<img src='img/soc.png' width='150'>"; //"&lt;img src=&#39;img/soc.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "soc.png";
+              var markerlat    = 16.749103;
+              var markerlng    = 100.1962997;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 26;
+              var markertitle  = "คณะสาธารณสุขศาสตร์";
+              var markerdetail = "<img src='img/nuph.png' width='150'>"; //"&lt;img src=&#39;img/nuph.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "nuph.png";
+              var markerlat    = 16.74515817;
+              var markerlng    = 100.1897298;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 51;
+              var markertitle  = "โครงการหอพักนิสิตมหาวิทยาลัยนเรศวร (NU Dorm)";
+              var markerdetail = "<img src='img/DSCF0250.jpg' width='150'>"; //"&lt;img src=&#39;img/DSCF0250.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "NU_Dormitory.JPG";
+              var markerlat    = 16.73710804;
+              var markerlng    = 100.2001635;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 12;
+              var markertitle  = "ที่ทำการไปรษณีย์ (สาขามน.)";
+              var markerdetail = "<img src='img/180111045206.jpg' width='150'>"; //"&lt;img src=&#39;img/180111045206.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "thailandpost.png";
+              var markerlat    = 16.74404823;
+              var markerlng    = 100.1899471;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 49;
+              var markertitle  = "พิพิธภัณฑ์ผ้า";
+              var markerdetail = "<img src='img/text_m.jpg' width='150'>"; //"&lt;img src=&#39;img/text_m.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "text_m.jpg";
+              var markerlat    = 16.75083859;
+              var markerlng    = 100.1936;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 101;
+              var markertitle  = "โรงพยาบาลทันตกรรม";
+              var markerdetail = "<img src='img/DentClinic.png' width='150'>"; //"&lt;img src=&#39;img/DentClinic.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "DentClinic.png";
+              var markerlat    = 16.74711018;
+              var markerlng    = 100.1892119;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 103;
+              var markertitle  = "โรงเรียนสาธิตมหาวิทยาลัยนเรศวร (ปฐมวัยและประถมศึกษา)";
+              var markerdetail = "<img src='img/NUDS_2.jpg' width='150'>"; //"&lt;img src=&#39;img/NUDS_2.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "NUDS_1.png";
+              var markerlat    = 16.74788331;
+              var markerlng    = 100.1937801;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 3;
+              var markertitle  = "โรงละครเฉลิมพระเกียรติ (อาคารเรียนรวม QS)";
+              var markerdetail = "<img src='img/QS.jpg' width='150'>"; //"&lt;img src=&#39;img/QS.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "theater.png";
+              var markerlat    = 16.74579912;
+              var markerlng    = 100.1930326;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 48;
+              var markertitle  = "ลานกิจกรรมกลางแจ้ง (ศิลป์ศาลา)";
+              var markerdetail = "<img src='img/pic19.jpg' width='150'>"; //"&lt;img src=&#39;img/pic19.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "pic19.jpg";
+              var markerlat    = 16.74755774;
+              var markerlng    = 100.1972816;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 29;
+              var markertitle  = "วิทยาลัยการจัดการระบบสุขภาพ";
+              var markerdetail = "<img src='img/chsm.png' width='150'>"; //"&lt;img src=&#39;img/chsm.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "chsm.png";
+              var markerlat    = 16.74249516;
+              var markerlng    = 100.1916771;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 45;
+              var markertitle  = "วิทยาลัยนานาชาติ";
+              var markerdetail = "<img src='img/nuic.png' width='150'>"; //"&lt;img src=&#39;img/nuic.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "nuic.png";
+              var markerlat    = 16.74553955;
+              var markerlng    = 100.1935566;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 36;
+              var markertitle  = "วิทยาลัยพลังงานทดแทนและสมาร์ดกริตเทคโนโลยี";
+              var markerdetail = "<img src='img/SGTech.jpg' width='150'>"; //"&lt;img src=&#39;img/SGTech.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "SGTech.jpg";
+              var markerlat    = 16.73755746;
+              var markerlng    = 100.1947059;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 38;
+              var markertitle  = "วิทยาลัยเพื่อการค้นคว้าระดับรากฐาน";
+              var markerdetail = "<img src='img/if.png' width='150'>"; //"&lt;img src=&#39;img/if.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "if.png";
+              var markerlat    = 16.74215518;
+              var markerlng    = 100.1924192;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 34;
+              var markertitle  = "วิทยาลัยโลจิสติกส์และโซ่อุปทาน";
+              var markerdetail = "<img src='img/logistics.png' width='150'>"; //"&lt;img src=&#39;img/logistics.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "logistics.png";
+              var markerlat    = 16.74450039;
+              var markerlng    = 100.1964117;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 105;
+              var markertitle  = "ศูนย์แสดงนิทรรศการและการจัดประชุม สมเด็จพระนเรศวรมหาราช (KNECC) อาคารอุทยานองค์สมเด็จพระนเรศวรมหาราช";
+              var markerdetail = "<img src='img/GreatHall.jpg' width='150'>"; //"&lt;img src=&#39;img/GreatHall.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "GreatHall_logo.jpg";
+              var markerlat    = 16.7480637466524;
+              var markerlng    = 100.185722248863;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 4;
+              var markertitle  = "ศูนย์หนังสือจุฬาลงกรณ์ มหาวิทยาลัยนเรศวร";
+              var markerdetail = "<img src='img/IMG_8630.jpg' width='150'>"; //"&lt;img src=&#39;img/IMG_8630.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "purchase-books.png";
+              var markerlat    = 16.74516214;
+              var markerlng    = 100.1933652;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 8;
+              var markertitle  = "ศูนย์อาหาร NU Canteen";
+              var markerdetail = "<img src='img/nu_canteen.jpg' width='150'>"; //"&lt;img src=&#39;img/nu_canteen.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "food.png";
+              var markerlat    = 16.74421437;
+              var markerlng    = 100.1933666;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 46;
+              var markertitle  = "ศูนย์อาหาร NU Square";
+              var markerdetail = "<img src='img/nu_square.jpg' width='150'>"; //"&lt;img src=&#39;img/nu_square.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "nu_square.jpg";
+              var markerlat    = 16.7374144;
+              var markerlng    = 100.1990618;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 19;
+              var markertitle  = "ศูนย์อาหารเพราพิลาส ";
+              var markerdetail = "<img src='img/180111045206.jpg' width='150'>"; //"&lt;img src=&#39;img/180111045206.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "food.png";
+              var markerlat    = 16.74404823;
+              var markerlng    = 100.1899471;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 102;
+              var markertitle  = "สถานปฏิบัติการเภสัชกรรมชุมชน สาขา2";
+              var markerdetail = "<img src='img/pharmacy_2.png' width='150'>"; //"&lt;img src=&#39;img/pharmacy_2.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "pharmacy_2.png";
+              var markerlat    = 16.74404383;
+              var markerlng    = 100.1991642;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 15;
+              var markertitle  = "สถานพัฒนาวิชาการด้านภาษา (ศูนย์ภาษา NULC)";
+              var markerdetail = "ชั้น 4</br><img src='img/citcoms-pic-ab1.png' width='150'> "; //"ชั้น 4&lt;/br&gt;&lt;img src=&#39;img/citcoms-pic-ab1.png&#39; width=&#39;150&#39;&gt; "; invalid
+              var markerimg    = "nulc.png";
+              var markerlat    = 16.74763596;
+              var markerlng    = 100.1952932;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 55;
+              var markertitle  = "สถานสัตว์ทดลองเพื่อการวิจัย";
+              var markerdetail = "<img src='img/CNR_NU.jpg' width='150'>"; //"&lt;img src=&#39;img/CNR_NU.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "CNR_NU.jpg";
+              var markerlat    = 16.742703;
+              var markerlng    = 100.191095;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 22;
+              var markertitle  = "สถานีขนส่งมวลชน มหาวิทยาลัยนเรศวร";
+              var markerdetail = "<img src='img/img12.jpg' width='150'>"; //"&lt;img src=&#39;img/img12.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "img12.jpg";
+              var markerlat    = 16.73842819;
+              var markerlng    = 100.1999646;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 6;
+              var markertitle  = "สระว่ายน้ำสุพรรณกัลยา ";
+              var markerdetail = "<img src='img/pool.jpg' width='150'>"; //"&lt;img src=&#39;img/pool.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "swimming-pool.png";
+              var markerlat    = 16.74670579;
+              var markerlng    = 100.1973966;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 5;
+              var markertitle  = "สำนักหอสมุด";
+              var markerdetail = "<img src='img/300px-NU_Central_Library.JPG' width='150'>"; //"&lt;img src=&#39;img/300px-NU_Central_Library.JPG&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "bookshelf.png";
+              var markerlat    = 16.7456707;
+              var markerlng    = 100.1942182;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 18;
+              var markertitle  = "อาคารกิจกรรมด้านศิลปวัฒนธรรม ";
+              var markerdetail = "<img src='img/culture_photo.jpg' width='150'>"; //"&lt;img src=&#39;img/culture_photo.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "culture.png";
+              var markerlat    = 16.7400546;
+              var markerlng    = 100.1991185;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 7;
+              var markertitle  = "อาคารกีฬาในร่ม (ข้างสระว่ายน้ำสุพรรณกัลยา)";
+              var markerdetail = "<img src='img/IMG_6188.JPG' width='150'>"; //"&lt;img src=&#39;img/IMG_6188.JPG&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "badminton.png";
+              var markerlat    = 16.74704482;
+              var markerlng    = 100.1970935;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 16;
+              var markertitle  = "อาคารขวัญเมือง ";
+              var markerdetail = "<img src='img/DSCF0250.jpg' width='150'>"; //"&lt;img src=&#39;img/DSCF0250.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "NU_Dormitory.JPG";
+              var markerlat    = 16.73735898;
+              var markerlng    = 100.199783;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 2;
+              var markertitle  = "อาคารเฉลิมพระเกียรติ 72 พรรษา (อาคารเรียนรวม QS)";
+              var markerdetail = "<img src='img/300px-QS_hall.JPG' width='150'>"; //"&lt;img src=&#39;img/300px-QS_hall.JPG&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "school.png";
+              var markerlat    = 16.74656966;
+              var markerlng    = 100.1924747;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 52;
+              var markertitle  = "อาคารปราบไตรจักร";
+              var markerdetail = "<img src='img/p.jpg' width='150'>"; //"&lt;img src=&#39;img/p.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "p.jpg";
+              var markerlat    = 16.74775674;
+              var markerlng    = 100.1934428;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 53;
+              var markertitle  = "อาคารปราบไตรจักร 2";
+              var markerdetail = "<img src='img/p2.png' width='150'>"; //"&lt;img src=&#39;img/p2.png&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "p2.png";
+              var markerlat    = 16.74896496;
+              var markerlng    = 100.1963112;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 50;
+              var markertitle  = "อาคารเพราพิลาส ";
+              var markerdetail = "<img src='img/180111045206.jpg' width='150'>"; //"&lt;img src=&#39;img/180111045206.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "180111045206.jpg";
+              var markerlat    = 16.74407093;
+              var markerlng    = 100.1901394;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 21;
+              var markertitle  = "อาคารมหาธรรมราชา";
+              var markerdetail = "<img src='img/2012_11_19_14_40_50.jpg' width='150'>"; //"&lt;img src=&#39;img/2012_11_19_14_40_50.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "2012_11_19_14_40_50.jpg";
+              var markerlat    = 16.74152796;
+              var markerlng    = 100.1921852;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 54;
+              var markertitle  = "อาคารวิสุทธิกษัตริย์";
+              var markerdetail = "<img src='img/120081397.jpg' width='150'>"; //"&lt;img src=&#39;img/120081397.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "120081397.jpg";
+              var markerlat    = 16.75062657;
+              var markerlng    = 100.1941497;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 17;
+              var markertitle  = "อาคารสำนักงานอธิการบดี ";
+              var markerdetail = "<img src='img/pic_office.jpg' width='150'>"; //"&lt;img src=&#39;img/pic_office.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "NU.png";
+              var markerlat    = 16.74805887;
+              var markerlng    = 100.1918917;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 106;
+              var markertitle  = "อาคารอเนกประสงค์";
+              var markerdetail = "<img src='img/300px-Dome.jpg' width='150'>"; //"&lt;img src=&#39;img/300px-Dome.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "300px-Dome.jpg";
+              var markerlat    = 16.75068289;
+              var markerlng    = 100.1931716;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+
+              var markerid     = 20;
+              var markertitle  = "อาคารเอกาทศรถ ";
+              var markerdetail = "<img src='img/75070528.jpg' width='150'>"; //"&lt;img src=&#39;img/75070528.jpg&#39; width=&#39;150&#39;&gt;"; invalid
+              var markerimg    = "75070528.jpg";
+              var markerlat    = 16.74245519;
+              var markerlng    = 100.1916032;
+
+              image = {
+                  url: "img/" +  markerimg,
+                  scaledSize: new google.maps.Size(30,30), // scaled size
+                  origin: new google.maps.Point(0, 0), // origin
+                  anchor: new google.maps.Point(15, 15) // anchor
+              };
+              
+              marker[markerid] = new google.maps.Marker({
+                  position: { lat: markerlat, lng: markerlng },
+                  map: maps,
+                  icon: image,
+                  title: markertitle
+              });
+
+              detail = markertitle + "</br>" + markerdetail + "</br><button onclick='route(" + markerlat + "," + markerlng + ")'>นำทาง</button>"
+
+              attachSecretMessage(marker[markerid], detail);
+
+              side_bar_html += "<option value="+ markerid + ">" + markertitle + "<\/option>";
+                       
+            
+          }
+
+          function attachSecretMessage(marker, secretMessage) {
+              var infowindow = new google.maps.InfoWindow({
+                  content: secretMessage
+              });
+
+              marker.addListener('click', function () {
+                  infowindow.open(marker.get('map'), marker);
+              });
+          }
+
+          function route(lat, long) {
+              window.open("https://www.google.com/maps/dir/?api=1&origin=" + melocaltion + "&destination=" + lat + "," + long,'_blank');
+          }
+
+          function myclick(i) {
+              maps.setCenter(marker[i].getPosition());
+              google.maps.event.trigger(marker[i], "click");
+          }
+
+      </script>
+      <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqB9LqLIUiVhCwpF95RPbM6KU10IdtjkI&callback=initMap" type="text/javascript"></script>
+
+</html>
+

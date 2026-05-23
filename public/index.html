@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NU HealthyZerocarbon</title>
+  <meta name="description" content="NU HealthyZerocarbon ช่วยติดตามการเดิน ลดการปล่อย CO₂ วางแผนเส้นทางเป็นมิตรต่อสิ่งแวดล้อม และร่วมชุมชน zero carbon." />
+  <meta name="keywords" content="NU HealthyZerocarbon, zero carbon, เดินลดคาร์บอน, แผนที่ eco, ลด CO2, เว็บแอปสุขภาพ" />
+  <meta name="author" content="NU HealthyZerocarbon" />
+  <link rel="canonical" href="https://nu-healthy-zerocarbon.web.app/" />
+  <meta property="og:title" content="NU HealthyZerocarbon" />
+  <meta property="og:description" content="เริ่มเดิน ลดคาร์บอน และวางแผนเส้นทาง eco-friendly กับ NU HealthyZerocarbon" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nu-healthy-zerocarbon.web.app/" />
+  <meta property="og:image" content="https://nu-healthy-zerocarbon.web.app/nu_logo.png" />
+  <meta property="og:site_name" content="NU HealthyZerocarbon" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="NU HealthyZerocarbon" />
+  <meta name="twitter:description" content="เริ่มเดิน ลด CO₂ และร่วมชุมชน NU HealthyZerocarbon เพื่อโลกที่ดีกว่า" />
+  <meta name="twitter:image" content="https://nu-healthy-zerocarbon.web.app/nu_logo.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://nu-healthy-zerocarbon.web.app/",
+    "name": "NU HealthyZerocarbon",
+    "description": "NU HealthyZerocarbon ช่วยติดตามการเดิน ลดคาร์บอน และวางแผนเส้นทาง eco-friendly สำหรับชุมชน NU HealthyZerocarbon",
+    "publisher": {
+      "@type": "Organization",
+      "name": "NU HealthyZerocarbon",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://nu-healthy-zerocarbon.web.app/nu_logo.png"
+      }
+    }
+  }
+  </script>
+  <link rel="stylesheet" href="code.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <link rel="icon" href="nu_logo.png" type="image/png" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       LOGIN PAGE
+  ═══════════════════════════════════════════ -->
+  <div id="page-login" class="page active">
+    <div class="login-bg">
+      <span class="bg-icon icon-sprout">🌱</span>
+      <span class="bg-icon icon-earth">🌍</span>
+      <span class="bg-icon icon-heart">💚</span>
+      <span class="bg-icon icon-sparkle">✨</span>
+      <span class="bg-icon icon-leaf">🍃</span>
+    </div>
+
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-badge">
+            <img src="nu_logo.png" alt="NU HealthyZerocarbon logo" />
+          </div>
+          <h1 class="logo-title">NU HealthyZerocarbon</h1>
+          <p class="logo-sub">Move for a greener NU 🌿</p>
+      </div>
+      <div class="login-tagline">
+        <p>Every step you take<br/><strong>saves our planet 🌎</strong></p>
+      </div>
+
+      <div class="form-group">
+        <label>📧 Email</label>
+        <input type="email" id="login-email" placeholder="Enter your email" />
+      </div>
+      <div class="form-group">
+        <label>🔒 Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" />
+      </div>
+
+      <button type="button" class="btn-primary" id="btn-login">
+        Let's Walk! 🚀
+      </button>
+
+      <div class="login-footer">
+        <a href="#" id="link-forgot-password">Forgot password?</a> · <a href="#" id="link-to-signup" onclick="showSignupPage(); return false;">Sign Up</a>
+      </div>
+
+      <div class="eco-note">
+        🌱 Walking 1km saves ~150g of CO₂ 
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       SIGNUP PAGE
+  ═══════════════════════════════════════════ -->
+  <div id="page-signup" class="page hidden">
+    <div class="login-bg">
+      <span class="bg-icon icon-sprout">🌱</span>
+      <span class="bg-icon icon-earth">🌍</span>
+      <span class="bg-icon icon-heart">💚</span>
+      <span class="bg-icon icon-sparkle">✨</span>
+      <span class="bg-icon icon-leaf">🍃</span>
+    </div>
+
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-badge">
+            <img src="nu_logo.png" alt="NU HealthyZerocarbon logo" />
+          </div>
+          <h1 class="logo-title">NU HealthyZerocarbon</h1>
+      </div>
+
+      <div class="login-tagline">
+        <p>Create an account and start<br/><strong>making a difference today 🌎</strong></p>
+      </div>
+
+      <div class="form-group">
+        <label>👤 Full Name</label>
+        <input type="text" id="signup-name" placeholder="Your full name" />
+      </div>
+      <div class="form-group">
+        <label>📧 Email Address</label>
+        <input type="email" id="signup-email" placeholder="your@email.com" />
+      </div>
+      <div class="form-group">
+        <label>🔒 Password</label>
+        <input type="password" id="signup-password" placeholder="Enter your password" />
+      </div>
+      <div class="form-group">
+        <label>✓ Confirm Password</label>
+        <input type="password" id="signup-confirm-password" placeholder="Re-enter password" />
+      </div>
+
+      <button type="button" class="btn-primary" id="btn-signup">
+        Create Account 🚀
+      </button>
+
+      <div class="login-footer">
+        <a href="#" id="link-to-login" onclick="showLoginPage(); return false;">Already have an account? Log in</a>
+      </div>
+
+      <div class="eco-note">
+        🌱 Every eco walker counts! Together we make an impact
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MAIN APP SHELL (after login)
+  ═══════════════════════════════════════════ -->
+  <div id="app-shell" class="hidden">
+
+    <!-- MAP MODE CHOICE MODAL -->
+    <div id="map-choice-modal" class="map-choice-modal hidden">
+      <div class="map-choice-card">
+        <div class="choice-header">
+          <div class="choice-icon">🗺️</div>
+          <div>
+            <h2>เลือกโหมดแผนที่</h2>
+            <p>คุณต้องการใช้แผนที่แบบไหน?</p>
+          </div>
+        </div>
+
+        <div class="choice-options">
+          <button class="map-choice-option selected" data-choice="live">
+            <div class="choice-title">Live Walk Tracker</div>
+            <div class="choice-desc">ติดตามเส้นทางแบบ real-time บันทึกสถิติโดยทันที</div>
+          </button>
+          <button class="map-choice-option" data-choice="route">
+            <div class="choice-title">เดินแทนมอเตอร์ไซต์</div>
+            <div class="choice-desc">วางแผนเส้นทาง A → B คำนวณประหยัดน้ำมันและ CO₂</div>
+          </button>
+          <button class="map-choice-option" data-choice="stairs">
+            <div class="choice-title">Stair Challenge</div>
+            <div class="choice-desc">คำนวณแคลอรี่และการประหยัดพลังงานเมื่อเลือกใช้บันได</div>
+          </button>
+        </div>
+
+        <div class="choice-actions">
+          <button class="btn-secondary" id="btn-cancel-map-choice">ยกเลิก</button>
+          <button class="btn-primary" id="btn-confirm-map-choice">ยืนยัน — เข้าสู่โหมดที่เลือก</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOP BAR (desktop) -->
+    <header class="top-bar">
+      <div class="top-bar-left">
+        <span class="tb-logo">NU HealthyZerocarbon🌿</span>
+        <span class="tb-tagline"></span>
+      </div>
+      <nav class="top-nav">
+        <button class="top-nav-btn active" data-tab="home">🏠 Home</button>
+        <button class="top-nav-btn" data-tab="map">🗺️ Map</button>
+        <button class="top-nav-btn" data-tab="achievements">🏆 Badges</button>
+        <button class="top-nav-btn" data-tab="history">📅 History</button>
+        <button class="top-nav-btn" data-tab="profile">👤 Profile</button>
+      </nav>
+      <div class="top-bar-right">
+        <div class="top-streak">🔥 <span id="tb-streak">0</span> day streak</div>
+        <div class="top-avatar" id="top-avatar-btn">
+          <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=eco" alt="avatar" />
+        </div>
+      </div>
+    </header>
+
+    <!-- CONTENT AREA -->
+    <main class="content-area">
+
+      <!-- ─── HOME / DASHBOARD ─── -->
+      <section id="tab-home" class="tab-content active">
+
+        <div class="dashboard-greeting">
+          <div>
+            <p class="greeting-sub">Good morning! 🌤️</p>
+            <h2 class="greeting-name"><span id="user-name-home">User</span> 👋</h2>
+          </div>
+          <div class="daily-goal-pill">
+            <span>Goal: <strong id="goal-display">5,000</strong> steps</span>
+          </div>
+        </div>
+
+        <!-- STEP RING TRACKER -->
+        <div class="step-tracker-card">
+          <div class="step-ring-wrap">
+            <svg class="step-ring" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <circle class="ring-bg" cx="100" cy="100" r="80" />
+              <circle class="ring-progress" id="ring-progress" cx="100" cy="100" r="80"
+                stroke-dasharray="502"
+                stroke-dashoffset="502" />
+            </svg>
+            <div class="ring-inner">
+              <div class="ring-emoji">🚶</div>
+              <div class="ring-steps" id="ring-steps">0</div>
+              <div class="ring-label">steps today</div>
+            </div>
+          </div>
+
+          <div class="step-stats-row">
+            <div class="stat-chip">
+              <span class="stat-icon">🔥</span>
+              <span class="stat-val" id="stat-cal">0</span>
+              <span class="stat-label">kcal</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-icon">📏</span>
+              <span class="stat-val" id="stat-km">0.0</span>
+              <span class="stat-label">km</span>
+            </div>
+            <div class="stat-chip">
+              <span class="stat-icon">⏱️</span>
+              <span class="stat-val" id="stat-min">0</span>
+              <span class="stat-label">min</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- CARBON SAVED WIDGET -->
+        <div class="carbon-card">
+          <div class="carbon-header">
+            <h3>🌍 Carbon Saved Today</h3>
+            <span class="carbon-badge">Live</span>
+          </div>
+          <div class="carbon-body">
+            <div class="carbon-main">
+              <span class="carbon-val" id="carbon-grams">0.00</span>
+              <span class="carbon-unit">kg CO₂e</span>
+            </div>
+            <div class="carbon-sub">
+              ≈ <span id="carbon-km-equiv">0.0</span> km of car travel avoided 🚗💨
+            </div>
+          </div>
+          <div class="carbon-bar-wrap">
+            <div class="carbon-bar" id="carbon-bar"></div>
+          </div>
+        </div>
+
+        <!-- TREE WIDGET -->
+        <div class="tree-widget-card">
+          <div class="tree-widget-left">
+            <div class="tree-emoji-big" id="tree-emoji">🌱</div>
+            <div class="tree-progress-ring-wrap">
+              <svg viewBox="0 0 80 80" class="tree-ring-svg">
+                <circle class="tree-ring-bg" cx="40" cy="40" r="32"/>
+                <circle class="tree-ring-fill" id="tree-ring-fill" cx="40" cy="40" r="32"
+                  stroke-dasharray="201"
+                  stroke-dashoffset="201"/>
+              </svg>
+              <span class="tree-ring-pct" id="tree-ring-pct">0%</span>
+            </div>
+          </div>
+          <div class="tree-widget-right">
+            <h3 class="tree-title">🌳 Trees Saved</h3>
+            <p class="tree-count"><span id="tree-count">0</span> <small>virtual trees</small></p>
+            <p class="tree-sub">
+              <span id="tree-co2-left">21.8</span>g CO₂ more to<br/>grow your next 🌳
+            </p>
+            <div class="tree-legend">
+              <span>🌱 Seedling</span>
+              <span>🌿 Sapling</span>
+              <span>🌳 Full Tree</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- QUICK ACHIEVEMENTS STRIP -->
+        <div class="quick-achieve">
+          <h3>🏅 Today's Challenges</h3>
+          <div class="challenge-strip" id="challenge-strip">
+            <!-- filled by JS -->
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─── STAIRS / STAIR CHALLENGE ─── -->
+      <section id="tab-stairs" class="tab-content">
+        <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-size:28px">🏢</span>
+            <div>
+              <h2 style="margin:0;font-size:20px;">Stair Challenge — ใช้บันไดแทนลิฟต์</h2>
+              <p style="margin:0;color:#6b7a72;font-size:13px;">คำนวณแคลอรี่ที่เผาผลาญ และพลังงานไฟฟ้าที่ประหยัดได้จากการเลือกขึ้น-ลงบันได</p>
+            </div>
+          </div>
+          <button class="btn-secondary btn-mode-reset" id="btn-change-map-mode-stairs">เลือกโหมดใหม่</button>
+        </div>
+
+        <div class="card" style="max-width:900px">
+          <div class="card-title">🔢 ป้อนข้อมูลของคุณ</div>
+          <div class="input-grid" style="grid-template-columns:repeat(3,1fr);">
+            <div class="input-group">
+              <label>น้ำหนัก (กก.)</label>
+              <input type="number" id="weight" value="60" min="30" max="150">
+            </div>
+            <div class="input-group">
+              <label>จำนวนชั้นที่ขึ้น</label>
+              <input type="number" id="floorsUp" value="5" min="1" max="50">
+            </div>
+            <div class="input-group">
+              <label>จำนวนชั้นที่ลง</label>
+              <input type="number" id="floorsDown" value="5" min="0" max="50">
+            </div>
+          </div>
+          <div class="input-grid" style="grid-template-columns:repeat(3,1fr);">
+            <div class="input-group">
+              <label>ทำกี่รอบต่อวัน</label>
+              <input type="number" id="trips" value="2" min="1" max="20">
+            </div>
+            <div class="input-group">
+              <label>ประเภทลิฟต์</label>
+              <select id="liftType">
+                <option value="2.5">ลิฟต์โดยสาร (2.5 kWh/เที่ยว)</option>
+                <option value="1.5">ลิฟต์ขนาดเล็ก (1.5 kWh/เที่ยว)</option>
+                <option value="3.5">ลิฟต์อาคารสูง (3.5 kWh/เที่ยว)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>ค่าไฟฟ้า (บาท/หน่วย)</label>
+              <input type="number" id="elecRate" value="4.5" step="0.1" min="1">
+            </div>
+          </div>
+          <button class="calc-btn" id="btn-calc-stairs">📊 คำนวณผลลัพธ์</button>
+        </div>
+
+        <div class="stat-grid" style="margin-top:14px;">
+          <div class="stat-card">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-val" id="res-cal">—</div>
+            <div class="stat-label">แคลอรี่/วัน (kcal)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-val" id="res-kwh">—</div>
+            <div class="stat-label">ไฟฟ้าที่ประหยัด (หน่วย)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-val" id="res-baht">—</div>
+            <div class="stat-label">ประหยัดเงิน (บาท/วัน)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🌍</div>
+            <div class="stat-val" id="res-co2">—</div>
+            <div class="stat-label">ลด CO₂ (ตัน CO₂e/วัน)</div>
+          </div>
+        </div>
+
+        <div class="monthly-banner" id="monthly-banner" style="display:none;margin-top:12px;">
+          <span id="monthly-text"></span>
+        </div>
+
+        <div class="elec-card" id="elec-detail" style="display:none;margin-top:12px;">
+          <div class="elec-title">💡 สรุปการประหยัดพลังงาน</div>
+          <div class="elec-grid">
+            <div class="elec-item">
+              <div class="elec-val" id="e-day">—</div>
+              <div class="elec-lbl">หน่วยไฟ / วัน</div>
+            </div>
+            <div class="elec-item">
+              <div class="elec-val" id="e-month">—</div>
+              <div class="elec-lbl">หน่วยไฟ / เดือน (22 วันทำการ)</div>
+            </div>
+            <div class="elec-item">
+              <div class="elec-val" id="e-bday">—</div>
+              <div class="elec-lbl">บาท / วัน</div>
+            </div>
+            <div class="elec-item">
+              <div class="elec-val" id="e-bmonth">—</div>
+              <div class="elec-lbl">บาท / เดือน</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─── MAP ─── -->
+      <section id="tab-map" class="tab-content">
+        <div class="map-header map-header-with-action">
+          <div>
+            <h2>🗺️ Live Walk Tracker</h2>
+            <p>Track your route in real-time</p>
+          </div>
+          <button class="btn-secondary btn-mode-reset" id="btn-change-map-mode">เลือกโหมดใหม่</button>
+        </div>
+
+        <div class="map-placeholder" id="map-placeholder">
+          <div id="leaflet-map" class="leaflet-map"></div>
+          <div class="map-overlay-ui">
+            <svg class="map-route-svg" id="map-route-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+              <polyline id="map-route-polyline" class="map-route-line" points="" />
+            </svg>
+            <div class="map-grid"></div>
+          </div>
+          <div class="map-overlay-label">
+            <span class="map-label-text" id="map-overlay-label">🛰️ GPS Map (connect device to activate)</span>
+            <span class="map-coordinates-text hidden" id="map-coordinates-display"></span>
+          </div>
+        </div>
+
+        <div class="map-stats-row">
+          <div class="map-stat">
+            <div class="ms-icon">📏</div>
+            <div class="ms-val" id="map-km">0.0 km</div>
+            <div class="ms-label">Distance</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">⏱️</div>
+            <div class="ms-val" id="map-time">00:00</div>
+            <div class="ms-label">Time</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">⚡</div>
+            <div class="ms-val" id="map-pace">0:00</div>
+            <div class="ms-label">Pace / km</div>
+          </div>
+          <div class="map-stat">
+            <div class="ms-icon">🌍</div>
+            <div class="ms-val" id="map-co2">0g</div>
+            <div class="ms-label">CO₂ Saved</div>
+          </div>
+        </div>
+
+        <div class="map-controls">
+          <button class="btn-primary" id="btn-map-start">▶ Start Tracking</button>
+          <button class="btn-secondary" id="btn-map-pause">⏸ Pause</button>
+          <button class="btn-secondary" id="btn-show-coordinates">📍 Location</button>
+          <button class="btn-danger" id="btn-map-stop">⏹ Stop &amp; Save</button>
+        </div>
+
+      </section>
+
+      <!-- ─── ROUTE PLANNER ─── -->
+      <section id="tab-route-planner" class="tab-content">
+        <div class="route-planner-header map-header-with-action">
+          <div>
+            <h2>เดินแทนมอเตอร์ไซต์</h2>
+            <p>วางแผนเส้นทาง A → B คำนวณทุกอย่างอัตโนมัติ</p>
+          </div>
+          <button class="btn-secondary btn-mode-reset" id="btn-change-map-mode-route">เลือกโหมดใหม่</button>
+        </div>
+
+        <div class="route-planner-card">
+          <div class="route-planner-top">
+            <div class="route-planner-benefits">
+              <div class="benefit-item">🚶‍♀️ เดินสบาย</div>
+              <div class="benefit-item">🌱 ลด CO₂</div>
+              <div class="benefit-item">💰 ประหยัดเงิน</div>
+            </div>
+            <div class="route-planner-illustration">
+              <div class="route-planner-person">🚶</div>
+              <div class="route-planner-badge">A → B</div>
+              <div class="route-planner-bike">🏍️❌</div>
+            </div>
+          </div>
+          <div class="route-planner-tagline">เลือกจุดบนแผนที่ แล้วดูเส้นทางเดินได้ทันที ✨</div>
+
+          <div class="route-planner-map">
+            <div class="map-placeholder route-plan-map-placeholder">
+              <div id="route-planner-leaflet" class="leaflet-map"></div>
+              <div class="map-overlay-label">
+                <span class="map-label-text" id="route-planner-map-hint">🗺️ กดบนแผนที่เพื่อเลือกตำแหน่ง</span>
+                <span class="map-coordinates-text" id="route-planner-map-coords">เลือกจุด A ก่อน</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="route-preview">
+            <div class="route-pin start">A</div>
+            <div class="route-path"></div>
+            <div class="route-pin end">B</div>
+          </div>
+
+          <div class="route-fields">
+            <div class="form-group">
+              <label>📍 จุด A – ต้นทาง</label>
+              <select id="route-start-select">
+                <option value="">เลือกสถานที่เริ่มต้น</option>
+              </select>
+              <input type="text" id="route-start" placeholder="เลือกจากรายการด้านบน" style="margin-top: 8px; display: none;" />
+            </div>
+            <div class="form-group">
+              <label>🎯 จุด B – ปลายทาง</label>
+              <select id="route-end-select">
+                <option value="">เลือกสถานที่ปลายทาง</option>
+              </select>
+              <input type="text" id="route-end" placeholder="เลือกจากรายการด้านบน" style="margin-top: 8px; display: none;" />
+            </div>
+            <div class="form-group">
+              <label>⚖️ น้ำหนัก (กก.)</label>
+              <input type="number" id="route-weight" placeholder="กรุณากรอกน้ำหนัก" min="30" />
+            </div>
+            <div class="form-group">
+              <label>⛽ ราคาน้ำมัน (บาท/ลิตร)</label>
+              <input type="number" id="route-fuel-price" value="43" placeholder="กรุณากรอกราคาน้ำมัน" min="1" />
+            </div>
+          </div>
+
+          <button class="btn-primary" id="btn-calc-route">คำนวณเส้นทางและผลลัพธ์</button>
+
+          <div id="route-result" class="route-result hidden">
+            <h3>ผลการคำนวณ</h3>
+            <p id="route-result-text">เลือกจุด A และ B จากรายการด้านบน แล้วกดคำนวณ</p>
+          </div>
+
+          <button class="btn-start-walk hidden" id="btn-start-livewalk">▶ เริ่มเดิน</button>
+        </div>
+      </section>
+
+      <!-- ─── ACHIEVEMENTS ─── -->
+      <section id="tab-achievements" class="tab-content">
+        <div class="achieve-header">
+          <h2>🏆 Badges &amp; Achievements</h2>
+          <p>Keep walking to unlock them all!</p>
+        </div>
+
+        <div class="achieve-summary">
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-unlocked">0</span>
+            <span class="ach-sum-label">Unlocked</span>
+          </div>
+          <div class="ach-sum-divider"></div>
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-total">0</span>
+            <span class="ach-sum-label">Total</span>
+          </div>
+          <div class="ach-sum-divider"></div>
+          <div class="ach-sum-item">
+            <span class="ach-sum-val" id="ach-points">0</span>
+            <span class="ach-sum-label">Eco Points</span>
+          </div>
+        </div>
+
+        <!-- Level Bar -->
+        <div class="level-card">
+          <div class="level-header">
+            <span class="level-icon">🌿</span>
+            <div>
+              <strong class="level-name" id="level-name">Eco Seedling</strong>
+              <p class="level-desc">Keep walking to level up!</p>
+            </div>
+            <span class="level-num">Lv. <span id="level-num">1</span></span>
+          </div>
+          <div class="level-bar-bg">
+            <div class="level-bar-fill" id="level-bar-fill" style="width:0%"></div>
+          </div>
+          <div class="level-bar-labels">
+            <span id="level-current-points">0 pts</span><span>Next: <span id="level-next-points">1,000</span> pts</span>
+          </div>
+        </div>
+
+        <!-- Badges Grid -->
+        <div class="badges-section">
+          <h3>🎖️ My Badges</h3>
+          <div class="badges-grid" id="badges-grid">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Active Challenges -->
+        <div class="challenges-section">
+          <h3>⚡ Active Challenges</h3>
+          <div class="challenges-list" id="challenges-list">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── HISTORY ─── -->
+      <section id="tab-history" class="tab-content">
+        <div class="history-header">
+          <h2>📅 Walking History</h2>
+          <p>Your eco journey so far 🌱</p>
+        </div>
+
+        <!-- Week Summary -->
+        <div class="week-summary">
+          <h3>This Week</h3>
+          <div class="week-bars" id="week-bars">
+            <!-- Filled by JS -->
+          </div>
+          <div class="week-days" id="week-days">
+            <!-- Filled by JS -->
+          </div>
+        </div>
+
+        <!-- Cumulative Stats -->
+        <div class="cumul-stats">
+          <div class="cumul-card">
+            <span class="cumul-icon">👣</span>
+            <span class="cumul-val" id="total-steps-all">0</span>
+            <span class="cumul-label">Total Steps</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">📏</span>
+            <span class="cumul-val" id="total-km-all">0.0 km</span>
+            <span class="cumul-label">Distance</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">🌍</span>
+            <span class="cumul-val" id="total-co2-all">0g</span>
+            <span class="cumul-label">CO₂ Saved</span>
+          </div>
+          <div class="cumul-card">
+            <span class="cumul-icon">🌳</span>
+            <span class="cumul-val" id="total-trees-all">0</span>
+            <span class="cumul-label">Trees Saved</span>
+          </div>
+        </div>
+
+        <!-- Daily Log -->
+        <div class="daily-log">
+          <h3>📋 Daily Log</h3>
+          <div class="log-list" id="log-list">
+            <!-- Updated with real walk data when available -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ─── PROFILE ─── -->
+      <section id="tab-profile" class="tab-content">
+        <div class="profile-hero">
+          <div class="profile-avatar-wrap">
+            <img src="https://api.dicebear.com/7.x/fun-emoji/svg?seed=eco" class="profile-avatar" alt="avatar" />
+            <div class="profile-level-badge">Lv.1</div>
+          </div>
+          <h2 class="profile-name" id="profile-name-display">User Name</h2>
+          <p class="profile-joined">🌱 Eco walker since</p>
+
+          <div class="profile-rank">
+            <span id="profile-rank">🌿 Eco Seedling</span>
+          </div>
+        </div>
+
+        <!-- All-time stats -->
+        <div class="profile-stats-grid">
+          <div class="ps-card">
+            <span class="ps-icon">👣</span>
+            <span class="ps-val" id="ps-total-steps">0</span>
+            <span class="ps-label">Lifetime Steps</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🌍</span>
+            <span class="ps-val" id="ps-total-co2">0 kg</span>
+            <span class="ps-label">CO₂ Saved</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🌳</span>
+            <span class="ps-val" id="ps-total-trees">0</span>
+            <span class="ps-label">Trees Saved</span>
+          </div>
+          <div class="ps-card">
+            <span class="ps-icon">🔥</span>
+            <span class="ps-val" id="ps-streak">0</span>
+            <span class="ps-label">Day Streak</span>
+          </div>
+        </div>
+
+        <!-- Preferences -->
+        <div class="profile-section">
+          <h3>⚙️ Preferences</h3>
+          <div class="pref-list">
+            <div class="pref-item">
+              <span>🏃 Daily Step Goal</span>
+              <div class="pref-control">
+                <button class="pref-btn" id="goal-minus">−</button>
+                <span id="pref-goal-val">5,000</span>
+                <button class="pref-btn" id="goal-plus">+</button>
+              </div>
+            </div>
+            <div class="pref-item">
+              <span>🔔 Notifications</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-notif" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-item">
+              <span>🌙 Dark Mode</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-dark" />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+            <div class="pref-item">
+              <span>📍 Auto GPS Track</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-gps" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Eco Impact -->
+        <div class="profile-section eco-impact">
+          <h3>🌎 Your Eco Impact</h3>
+          <div class="impact-statement">
+            <p>Your walking has saved the equivalent of</p>
+            <div class="impact-big">🚗 0 km</div>
+            <p>of car travel, keeping <strong id="impact-eco-text">0 kg</strong> of CO₂ out of our atmosphere. You are a <strong>Climate Hero!</strong> 🦸‍♀️</p>
+          </div>
+        </div>
+
+        <button class="btn-logout" id="btn-logout">🚪 Log Out</button>
+      </section>
+
+    </main><!-- end .content-area -->
+
+    <!-- BOTTOM NAV (mobile) -->
+    <nav class="bottom-nav">
+      <button class="bnav-btn active" data-tab="home">
+        <span class="bnav-icon">🏠</span>
+        <span class="bnav-label">Home</span>
+      </button>
+      <button class="bnav-btn" data-tab="map">
+        <span class="bnav-icon">🗺️</span>
+        <span class="bnav-label">Map</span>
+      </button>
+      <button class="bnav-btn" data-tab="achievements">
+        <span class="bnav-icon">🏆</span>
+        <span class="bnav-label">Badges</span>
+      </button>
+      <button class="bnav-btn" data-tab="history">
+        <span class="bnav-icon">📅</span>
+        <span class="bnav-label">History</span>
+      </button>
+      <button class="bnav-btn" data-tab="profile">
+        <span class="bnav-icon">👤</span>
+        <span class="bnav-label">Profile</span>
+      </button>
+    </nav>
+
+    <!-- STUB ELEMENTS FOR DEAD CODE PATHS (prevent JS crashes) -->
+    <div id="card-walk" class="hidden"></div>
+    <div id="card-route" class="hidden"></div>
+    <div id="sec-modal" class="hidden"></div>
+    <div id="sec-route" class="hidden"></div>
+    <div id="sec-walk" class="hidden"></div>
+    <div id="route-results" class="hidden"></div>
+    <div id="route-sum" class="hidden"></div>
+    <input id="ptA" type="hidden" />
+    <input id="ptB" type="hidden" />
+    <input id="rw" type="hidden" />
+    <input id="fp" type="hidden" />
+
+  </div><!-- end #app-shell -->
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+    import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+    // Firebase Configuration — replace with your Web App config from Firebase Console
+    // Go to Project settings → Your apps → Firebase SDK snippet → Config
+    const firebaseConfig = {
+      apiKey: "AIzaSyArf3DU_iDTClHj5IZzyhQMcgxDfSyfqqQ",
+      authDomain: "nu-healthy-zerocarbon.web.app",
+      projectId: "nu-healthy-zerocarbon",
+      storageBucket: "nu-healthy-zerocarbon.firebasestorage.app",
+      appId: "1:396903999507:web:a4e4d78e667b1acf0cb7e6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.firebaseAuth = getAuth(app);
+    window.firebaseDb = getFirestore(app);
+  </script>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="auth.js"></script>
+  <script src="script.js"></script>
+  
+</body>
+</html>
+
+
+
+
